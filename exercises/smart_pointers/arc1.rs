@@ -20,21 +20,19 @@
 // `numbers` Vec!
 //
 // Execute `rustlings hint arc1` or use the `hint` watch subcommand for a hint.
-
-// I AM NOT DONE
-
 #![forbid(unused_imports)] // Do not change this, (or the next) line.
 use std::sync::Arc;
 use std::thread;
 
 fn main() {
     let numbers: Vec<_> = (0..100u32).collect();
-    let shared_numbers = // TODO
+    let shared_numbers =Arc::new(numbers); // TODO
     let mut joinhandles = Vec::new();
 
     for offset in 0..8 {
-        let child_numbers = // TODO
-        joinhandles.push(thread::spawn(move || {
+        let child_numbers = Arc::clone(&shared_numbers);
+    //spawn 是用于创建新线程的函数，通常是通过 std::thread 模块中的 spawn 函数来实现的。它允许你并行执行代码块，并返回一个 JoinHandle，可以用于等待线程完成和获取结果
+        joinhandles.push(thread::spawn(move || {   //
             let sum: u32 = child_numbers.iter().filter(|&&n| n % 8 == offset).sum();
             println!("Sum of offset {} is {}", offset, sum);
         }));

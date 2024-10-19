@@ -17,12 +17,10 @@
 // Note: the tests should not be changed
 //
 // Execute `rustlings hint box1` or use the `hint` watch subcommand for a hint.
-
-// I AM NOT DONE
-
+//String 在 Rust 中的确是一种复杂类型，它本身的结构（例如指向堆上的指针、长度、容量等）存储在栈上，而实际的文本数据存储在堆上
 #[derive(PartialEq, Debug)]
 pub enum List {
-    Cons(i32, List),
+    Cons(i32, Box<List>),
     Nil,
 }
 
@@ -35,11 +33,11 @@ fn main() {
 }
 
 pub fn create_empty_list() -> List {
-    todo!()
+    List::Nil
 }
 
 pub fn create_non_empty_list() -> List {
-    todo!()
+    List::Cons(1,Box::new(List::Nil))
 }
 
 #[cfg(test)]

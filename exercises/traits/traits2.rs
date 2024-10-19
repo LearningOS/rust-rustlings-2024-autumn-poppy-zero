@@ -8,22 +8,26 @@
 //
 // Execute `rustlings hint traits2` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
 
 trait AppendBar {
     fn append_bar(self) -> Self;
 }
 
-// TODO: Implement trait `AppendBar` for a vector of strings.
 
-#[cfg(test)]
+impl AppendBar for Vec<String> {
+    fn append_bar(mut self) -> Self {      //self 是通过获取所有权的方式传入函数的。
+       self.push(String::from("Bar"));
+       self   // 返回修改后的 Vec<String>
+    }
+}
+    #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn is_vec_pop_eq_bar() {
-        let mut foo = vec![String::from("Foo")].append_bar();
-        assert_eq!(foo.pop().unwrap(), String::from("Bar"));
-        assert_eq!(foo.pop().unwrap(), String::from("Foo"));
+        let mut foo = vec![String::from("Foo")].append_bar();   //这里，foo 的所有权转移到了 append_bar 方法中
+        assert_eq!(foo.pop().unwrap(), "Bar");
+        assert_eq!(foo.pop().unwrap(), "Foo");
     }
 }

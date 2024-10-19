@@ -14,7 +14,7 @@
 // Execute `rustlings hint hashmaps3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
+
 
 use std::collections::HashMap;
 
@@ -28,8 +28,8 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
     // The name of the team is the key and its associated struct is the value.
     let mut scores: HashMap<String, Team> = HashMap::new();
 
-    for r in results.lines() {
-        let v: Vec<&str> = r.split(',').collect();
+    for r in results.lines() {    //将字符串按照/n分割
+        let v: Vec<&str> = r.split(',').collect();//将字符串按照,分割
         let team_1_name = v[0].to_string();
         let team_1_score: u8 = v[2].parse().unwrap();
         let team_2_name = v[1].to_string();
@@ -39,7 +39,23 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
         // will be the number of goals conceded from team_2, and similarly
         // goals scored by team_2 will be the number of goals conceded by
         // team_1.
+        //累加更新team_1的信息
+        let entry_1=scores.entry(team_1_name.clone()).or_insert(Team{
+            goals_scored:0,
+            goals_conceded:0,
+        });
+        entry_1.goals_scored+=team_1_score;
+        entry_1.goals_conceded+=team_2_score;
+        //累加更新team_2的信息
+        let entry_2=scores.entry(team_2_name.clone()).or_insert(Team{
+            goals_scored:0,
+            goals_conceded:0,
+        });
+        entry_2.goals_scored+=team_2_score;
+        entry_2.goals_conceded+=team_1_score;
+
     }
+
     scores
 }
 
@@ -56,7 +72,7 @@ mod tests {
         results
     }
 
-    #[test]
+    #[test]       //检查生成的球队键是否正确
     fn build_scores() {
         let scores = build_scores_table(get_results());
 
@@ -68,7 +84,7 @@ mod tests {
         );
     }
 
-    #[test]
+    #[test]     //验证“England”球队进球和失球的情况
     fn validate_team_score_1() {
         let scores = build_scores_table(get_results());
         let team = scores.get("England").unwrap();
@@ -76,7 +92,7 @@ mod tests {
         assert_eq!(team.goals_conceded, 4);
     }
 
-    #[test]
+    #[test]     //验证"Spain"
     fn validate_team_score_2() {
         let scores = build_scores_table(get_results());
         let team = scores.get("Spain").unwrap();

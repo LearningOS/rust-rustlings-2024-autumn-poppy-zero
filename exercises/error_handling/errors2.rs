@@ -19,7 +19,7 @@
 // Execute `rustlings hint errors2` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
+
 
 use std::num::ParseIntError;
 
@@ -27,13 +27,23 @@ pub fn total_cost(item_quantity: &str) -> Result<i32, ParseIntError> {
     let processing_fee = 1;
     let cost_per_item = 5;
     let qty = item_quantity.parse::<i32>();
-
-    Ok(qty * cost_per_item + processing_fee)
+        match qty{
+          Ok(value) => {
+              Ok(value * cost_per_item + processing_fee)
+          }
+          Err(err)=> {
+              Err(err)
+          }
+        }
+}
+fn main() {
+    // You can optionally experiment here.
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::num::IntErrorKind; //IntErrorKind 是 std::num 模块中的一个枚举类型，它表示在将字符串解析为整数时，可能发生的各种错误类型
 
     #[test]
     fn item_quantity_is_a_valid_number() {
@@ -43,8 +53,8 @@ mod tests {
     #[test]
     fn item_quantity_is_an_invalid_number() {
         assert_eq!(
-            total_cost("beep boop").unwrap_err().to_string(),
-            "invalid digit found in string"
+            total_cost("beep boop").unwrap_err().kind(),  //unwrap_err() 是用于期望结果是 Err 的场景。如果你知道 Result 是 Err 并想获取其中的错误值，可以使用这个方法。
+            &IntErrorKind::InvalidDigit,
         );
     }
 }
